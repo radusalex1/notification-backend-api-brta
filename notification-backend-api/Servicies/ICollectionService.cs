@@ -2,15 +2,10 @@
 {
     public interface ICollectionService<T>
     {
-        List<T> GetAll();
+        Task<List<T>> GetAll();
+        Task<T> Get(Guid id);
+        Task<bool> Create(T model);
 
-        T Get(Guid id);
-
-        bool Create(T model);
-
-        bool Update(Guid id, T model);
-
-        bool Delete(Guid id);
 
     }
 }

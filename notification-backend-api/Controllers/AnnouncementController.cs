@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver;
 using notification_backend_api.Models;
 using notification_backend_api.Servicies;
 
@@ -10,77 +11,33 @@ namespace notification_backend_api.Controllers
     [ApiController]
     public class AnnouncementController : ControllerBase
     {
-        IAnnouncementCollectionService _announcementCollectionService;
+        private IAnnouncementCollectionService _announcementCollectionService;
 
         public AnnouncementController(IAnnouncementCollectionService announcementCollectionService)
         {
             _announcementCollectionService = announcementCollectionService ?? throw new ArgumentNullException(nameof(AnnouncementCollectionService));
         }
 
-
-        // GET: api/<AnnouncementController>
         [HttpGet]
-        [Route("/GetAllAnnouncements")]
-        public IActionResult GetAnnouncements()
+        public async Task<IActionResult> GetAnnouncements()
         {
-            List<Announcement> Announcements = _announcementCollectionService.GetAll();
-            return Ok(Announcements);
+            List<Announcement> announcements = await _announcementCollectionService.GetAll();
+            return Ok(announcements);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CreateAnnouncement([FromBody] Announcement announcement)
+        {
+            var result = await _announcementCollectionService.Create(announcement);
 
-        // POST api/<AnnouncementController>
-        //[HttpPost]
-        //public IActionResult CreateAnnouncement([FromBody] Announcement announcement)
-        //{
-        //    if (announcement == null)
-        //    {
-        //        return BadRequest("Announcement cannot be null");
-        //    }
+            return Ok(announcement);
+        }
 
-        //    _announcements.Add(announcement);
-
-        //    return Ok(announcement);
-        //}
-
-
-        //// PUT api/<AnnouncementController>/5
-        //[HttpPut("{id}")]
-        //public IActionResult UpdateAnnouncement(Guid id,[FromBody] Announcement announcement)
-        //{
-        //    if (announcement == null)
-        //    {
-        //        return BadRequest("Announcement cannot be null");
-        //    }
-
-        //    if(!_announcements.Any(a=>a.Id==announcement.Id))
-        //    {
-        //        return NotFound("Announcement cannot be found");
-        //    }
-
-        //    announcement.Id = id;
-
-        //    _announcements[_announcements.IndexOf(announcement)] = announcement;
-
-        //    return Ok(announcement);
-        //}
-
-        //// DELETE api/<AnnouncementController>/5
-        //[HttpDelete("{id}")]
-        //public IActionResult Delete(int id,[FromBody] Announcement announcement)
-        //{
-        //    if (announcement == null)
-        //    {
-        //        return BadRequest("Announcement cannot be null");
-        //    }
-
-        //    if (!_announcements.Any(a => a.Id == announcement.Id))
-        //    {
-        //        return NotFound("Announcement cannot be found");
-        //    }
-
-        //    _announcements.Remove(announcement);
-        //    return Ok("Announcement removed");
-
-        //}
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetAnnouncement(Guid id)
+        {
+            var result = await _announcementCollectionService.Get(id);
+            return Ok(result);
+        }
     }
 }

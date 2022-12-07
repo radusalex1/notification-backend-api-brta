@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Options;
 using notification_backend_api.Servicies;
 using System.Reflection;
 
@@ -17,6 +18,9 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services.AddSingleton<IAnnouncementCollectionService, AnnouncementCollectionService>();
+
+builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection(nameof(MongoDBSettings)));
+builder.Services.AddSingleton<IMongoDBSettings>(sp => sp.GetRequiredService<IOptions<MongoDBSettings>>().Value);
 
 
 var app = builder.Build();
