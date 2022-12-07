@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Options;
 using notification_backend_api.Servicies;
 using System.Reflection;
 
@@ -16,7 +17,25 @@ builder.Services.AddSwaggerGen(c =>
 
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "CorsPolicy",
+                              policy =>
+                              {
+                                  policy.WithOrigins("http://localhost:4200")
+                                  .AllowAnyHeader()
+                                  .AllowAnyMethod()
+                                  .AllowCredentials();
+                              });
+});
+
+builder.Services.AddSignalR();
+
+
 builder.Services.AddSingleton<IAnnouncementCollectionService, AnnouncementCollectionService>();
+
+builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection(nameof(MongoDBSettings)));
+builder.Services.AddSingleton<IMongoDBSettings>(sp => sp.GetRequiredService<IOptions<MongoDBSettings>>().Value);
 
 
 var app = builder.Build();
@@ -33,5 +52,20 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+
+app.UseCors("CorsPolicy");
+
+app.UseWebSockets(new WebSocketOptions
+{
+    KeepAliveInterval = TimeSpan.Zero,
+});
+
+app.UseRouting();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<NotificationsHub>("/hub/notifications");
+});
+
 
 app.Run();
