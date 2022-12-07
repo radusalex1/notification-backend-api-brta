@@ -4,7 +4,6 @@ using notification_backend_api.Models;
 using notification_backend_api.Servicies;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace notification_backend_api.Controllers
 {
     [Route("api/[controller]")]
@@ -18,7 +17,7 @@ namespace notification_backend_api.Controllers
             _announcementCollectionService = announcementCollectionService ?? throw new ArgumentNullException(nameof(AnnouncementCollectionService));
         }
 
-        [HttpGet]
+        [HttpGet("GetAll")]
         public async Task<IActionResult> GetAnnouncements()
         {
             List<Announcement> announcements = await _announcementCollectionService.GetAll();
@@ -30,7 +29,7 @@ namespace notification_backend_api.Controllers
         {
             var result = await _announcementCollectionService.Create(announcement);
 
-            return Ok(announcement);
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
