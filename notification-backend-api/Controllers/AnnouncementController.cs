@@ -24,7 +24,7 @@ namespace notification_backend_api.Controllers
             return Ok(announcements);
         }
 
-        [HttpPost]
+        [HttpPost("AddAnnouncement")]
         public async Task<IActionResult> CreateAnnouncement([FromBody] Announcement announcement)
         {
             var result = await _announcementCollectionService.Create(announcement);

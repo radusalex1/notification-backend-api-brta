@@ -56,7 +56,7 @@ namespace notification_backend_api.Servicies
 
         public async Task<List<Announcement>> GetAnnouncementsByCategoryId(string categoryId)
         {
-            return (await _announcements.FindAsync(announcement => announcement.Category == categoryId)).ToList();
+            return (await _announcements.FindAsync(announcement => announcement.CategoryId == categoryId)).ToList();
         }
 
         public async Task<List<Announcement>> GetAll()
