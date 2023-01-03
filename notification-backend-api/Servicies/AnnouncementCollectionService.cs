@@ -64,7 +64,5 @@ namespace notification_backend_api.Servicies
             var result = await _announcements.FindAsync(announcement => true);
             return result.ToList();
         }
-
-
     }
 }
