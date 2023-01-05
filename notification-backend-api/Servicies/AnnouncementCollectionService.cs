@@ -17,7 +17,7 @@ namespace notification_backend_api.Servicies
 
         public async Task<bool> Create(Announcement announcement)
         {
-            if (announcement.Id == Guid.Empty)
+            if (announcement.Id == Guid.Empty || announcement.Id==null)
             {
                 announcement.Id = Guid.NewGuid();
             }

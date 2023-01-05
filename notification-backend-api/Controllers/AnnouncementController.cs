@@ -2,11 +2,12 @@
 using MongoDB.Driver;
 using notification_backend_api.Models;
 using notification_backend_api.Servicies;
+using System.Runtime.CompilerServices;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 namespace notification_backend_api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("Announcement")]
     [ApiController]
     public class AnnouncementController : ControllerBase
     {
@@ -17,14 +18,14 @@ namespace notification_backend_api.Controllers
             _announcementCollectionService = announcementCollectionService ?? throw new ArgumentNullException(nameof(AnnouncementCollectionService));
         }
 
-        [HttpGet("GetAll")]
+        [HttpGet]
         public async Task<IActionResult> GetAnnouncements()
         {
             List<Announcement> announcements = await _announcementCollectionService.GetAll();
             return Ok(announcements);
         }
 
-        [HttpPost("CreateAnnouncement")]
+        [HttpPost]
         public async Task<IActionResult> CreateAnnouncement([FromBody] Announcement announcement)
         {
             var result = await _announcementCollectionService.Create(announcement);
