@@ -14,7 +14,17 @@ namespace notification_backend_api.Servicies
 
             _announcements = database.GetCollection<Announcement>(settings.AnnouncementsCollectionName);
         }
-
+        
+        public async Task<bool> deleteAll()
+        {
+            var listOfA = await GetAll();
+            foreach(Announcement announcement in listOfA)
+            {
+                await _announcements.DeleteOneAsync<Announcement>(a=>a.Id==announcement.Id);
+            }
+            return true;
+        }
+        
         public async Task<bool> Create(Announcement announcement)
         {
             if (announcement.Id == Guid.Empty || announcement.Id==null)
@@ -56,7 +66,7 @@ namespace notification_backend_api.Servicies
 
         public async Task<List<Announcement>> GetAnnouncementsByCategoryId(string categoryId)
         {
-            return (await _announcements.FindAsync(announcement => announcement.CategoryId == categoryId)).ToList();
+            return (await _announcements.FindAsync(announcement => announcement.Category == categoryId)).ToList();
         }
 
         public async Task<List<Announcement>> GetAll()

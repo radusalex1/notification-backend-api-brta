@@ -6,6 +6,8 @@
         Task<T> Get(Guid id);
         Task<bool> Create(T model);
 
+        Task<bool> deleteAll();
+
 
     }
 }
