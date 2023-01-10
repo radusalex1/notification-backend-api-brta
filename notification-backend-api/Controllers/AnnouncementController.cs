@@ -36,16 +36,35 @@ namespace notification_backend_api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAnnouncement(Guid id)
         {
-            var result = await _announcementCollectionService.Get(id);
+            var result = await _announcementCollectionService.GetByID(id);
             return Ok(result);
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> deleteOne(Guid id)
+        {
+            await _announcementCollectionService.Delete(id);
+            return Ok();
         }
 
         [HttpDelete]
         public async Task<IActionResult> deleteAll()
         {
-            await _announcementCollectionService.deleteAll();
+            var result = await _announcementCollectionService.deleteAll();
 
-            return Ok();
+            return Ok(result);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Update(Guid id, [FromBody] Announcement announcement)
+        {
+            if (id == null)
+            {
+                return BadRequest("id not found");
+            }
+
+            await _announcementCollectionService.Update(id, announcement);
+
+            return Ok("updated");
         }
     }
 }

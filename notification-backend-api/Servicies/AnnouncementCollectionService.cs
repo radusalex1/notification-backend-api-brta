@@ -46,7 +46,7 @@ namespace notification_backend_api.Servicies
             return true;
         }
 
-        public async Task<Announcement> Get(Guid id)
+        public async Task<Announcement> GetByID(Guid id)
         {
             return (await _announcements.FindAsync(announcement => announcement.Id == id)).FirstOrDefault();
         }
@@ -54,7 +54,9 @@ namespace notification_backend_api.Servicies
         public async Task<bool> Update(Guid id, Announcement announcement)
         {
             announcement.Id = id;
+
             var result = await _announcements.ReplaceOneAsync(announcement => announcement.Id == id, announcement);
+
             if (!result.IsAcknowledged && result.ModifiedCount == 0)
             {
                 await _announcements.InsertOneAsync(announcement);
@@ -63,12 +65,7 @@ namespace notification_backend_api.Servicies
 
             return true;
         }
-
-        public async Task<List<Announcement>> GetAnnouncementsByCategoryId(string categoryId)
-        {
-            return (await _announcements.FindAsync(announcement => announcement.Category == categoryId)).ToList();
-        }
-
+        
         public async Task<List<Announcement>> GetAll()
         {
             var result = await _announcements.FindAsync(announcement => true);
