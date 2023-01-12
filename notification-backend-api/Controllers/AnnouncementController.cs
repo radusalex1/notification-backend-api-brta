@@ -62,9 +62,9 @@ namespace notification_backend_api.Controllers
                 return BadRequest("id not found");
             }
 
-            await _announcementCollectionService.Update(id, announcement);
+            var result = await _announcementCollectionService.Update(id, announcement);
 
-            return Ok("updated");
+            return Ok(result);
         }
     }
 }
