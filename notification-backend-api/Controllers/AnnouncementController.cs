@@ -39,6 +39,7 @@ namespace notification_backend_api.Controllers
             var result = await _announcementCollectionService.GetByID(id);
             return Ok(result);
         }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> deleteOne(Guid id)
         {
