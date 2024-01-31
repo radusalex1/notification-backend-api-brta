@@ -41,11 +41,24 @@ builder.Services.AddSingleton<IMongoDBSettings>(sp => sp.GetRequiredService<IOpt
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+//if (app.Environment.IsDevelopment())
+//{
+//    app.UseSwagger();
+//    app.UseSwaggerUI();
+//}
+
+app.UseSwagger(options =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    options.SerializeAsV2 = true;
+});
+
+//app.UseSwaggerUI(options =>
+//{
+//    options.SwaggerEndpoint("/notification-backend-api/swagger/v1/swagger.json", "v1");
+//    options.RoutePrefix = "info/swagger";
+//});
+
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
